@@ -1,0 +1,113 @@
+.TH planets 1 "April 20, 2003" 
+.SH NAME
+planets \- Gravitational simulation of planetary bodies
+.\"
+.SH DESCRIPTION
+.\"
+.B Planets 
+is a simple interactive program for playing with simulations
+of planetary systems. It is great teaching tool for understanding how
+gravitation works on a planetary level.
+
+The user interface is aimed at being simple enough for a fairly young
+kid can get some joy of it.  There's also a special kid-mode aimed at very
+young children which grabs the focus and converts key banging into lots of
+random planets.
+.\"
+.SH KEYBINDINGS
+.\"
+.SS Universe definition
+.\"
+.IP a
+Add Planet
+.IP j
+Place random orbital planet
+.IP r
+Place random planet
+.IP u
+Undo (undoes last planet insertion)
+.IP e
+Reset to empty universe
+.IP g
+Go Back (goes back to just after last planet insertion)
+.IP Mouse
+Click on a planet to delete it
+.\"
+.SS Physics
+.\"
+.IP b
+Toggle bounce (experimental)
+.\"
+.SS Display control
+.\"
+.TP
+Cursor keys
+Panning
+.\"
+.TP 
+c, Space
+Move display to center of mass
+.IP x
+Initiate center of mass tracking
+.IP =
+Zoom in
+.IP -
+Zoom out
+.IP p
+Toggle Pause
+.IP o
+Change all colors randomly
+.IP t
+Toggle Trace
+.IP d
+Double Trace Length
+.IP h
+Halve Trace Length
+.IP Mouse
+Drag a box around a set of planets to follow the center of mass of
+those planets
+.\"
+.SS Program control
+.\"
+.IP H
+Display help dialog
+.IP k
+Display option dialog
+.IP Ctrl-Shift-k
+Toggle kid-mode.  Kid mode locks the keyboard and mouse, so the only way to
+get out is to toggle kid-mode again to get out.
+.IP l
+Load Universe
+After pressing l, press any other character to load the universe with
+that name. Universes are stored in ~/.planets/ .
+.IP s
+Save Universe
+.\"
+After pressing s, press any other character to save the universe with
+that name. Universes are saved in ~/.planets/ .
+.TP 
+q, Esc
+Quit
+.\"
+.SH TECHNICAL DETAILS
+.B Planets
+uses a fourth-order runge-kutta approximation for the simulation
+itself.  Planet bouncing is achieved by adding a repulsive force to planets
+at close quarters.  
+.B Planets
+is fairly flexible: you can change the
+gravitational constant, the time-slice of the simulation, and even the
+exponent used in the gravitational law.  Universes are saved in the
+~/.planets directory, and are simple human readable and editable files.
+.SH BUGS
+Currently bouncing doesn't work very well unless you make the time-slice
+quite small.  Ideally, it would be nice to have a billiard-style bounce
+system, but it's not clear how to do this accurately in the presence of a
+strong gravitational field.
+.SH AUTHOR
+.B Planets
+was written by Yaron M. Minsky <yminsky@cs.cornell.edu> as a gift for
+his nephew, Eyal Minsky-Fenick.
+
+This manpage was contributed originally by Martin Pitt <martin@piware.de> for
+the Debian GNU/Linux system (but may be used by others).

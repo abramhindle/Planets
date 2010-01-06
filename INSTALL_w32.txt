@@ -1,0 +1,9 @@
+When installing the binary on windows, you need to make sure that you have
+Tcl/Tk 8.3 installed.  You can get it at scriptics.com or activestate.com.
+Once it's installed, you may need to reboot, to ensure that the path to the
+Tcl libraries (typically C:\Tcl) is in your path.  You can add it manually if
+you like.
+
+Note that you also need the cygwin dll, which is included in the zip file.
+If you already have cygwin installed, then you can run planets from the
+cygwin command line without this installation of the cygwin dll.  

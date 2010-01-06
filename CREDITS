@@ -1,0 +1,11 @@
+* Yaron Minsky is the main author
+
+* Sandor Lehoczky helped out in implementing planet bouncing
+
+* Gunner Poulsen <gp@lyngbjerggaardskolen.dk> provided a number of useful
+  suggestions, as well as a Danish translation.
+
+* Daniel Andor contributed the 4th-order runge-kutta code
+
+* Martin Pitt contributed many packaging fixes while building a debian
+  package, and also wrote the initial version of the manpage.

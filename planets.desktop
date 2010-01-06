@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Planets
+Comment=A simple interactive program for playing with simulations of planetary systems
+Comment[da]=Et simpelt interaktivt program til at lege med simulering af planetsystemer
+Exec=planets
+Icon=planets.png
+Terminal=0
+Type=Application
+Categories=Application;Game;Education;Astronomy;Physics;

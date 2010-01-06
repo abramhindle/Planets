@@ -1,0 +1,59 @@
+* Physics
+
+ - implement better approximation --- 4th order runge kutta would be a nice
+   start, but there's a lot of stuff to do under this rubric, such as
+   varying the step size depending on the conditions.
+
+ - add in solar system snapshot.
+
+ - Better bouncing:
+    + repulsion field that drops off more quickly (nearly to zero outside of
+      radius bound?) so as not to affect normal physics.
+
+ - Redo COM-follow mode so it computes an offset for the COM, and then uses
+   those to reposition before display.  By keeping a record of the COM
+   offsets, tracing could be made to do something reasonable in COM-follow
+   mode. 
+
+ - Make 3D?  Could be done with a 2D-display and a simple
+   projection.... Use 2d-mouse movement for changing angle, maybe a scrollbar
+   for depth.  Could be done...
+
+ - Make 3D for real:  using LablGL.  This will hurt portability and
+   performance, however
+
+* Display
+
+  - Consider breaking up traces into lots of little line segments.  Whether
+    this is an improvement depends on the internals of Tcl/Tk, but it does
+    avoid the need for a linear scan (both in OCaml and in Tcl/Tk) every time
+    a planet moves.
+
+  - Consider using built-in Tcl/Tk scaling when zooming in and out.  It's not
+    clear, though, if that would really help performance.
+
+  - Port to LablGtk?  Canvas performance should be higher, there is
+    anti-aliasing, and gtk can be linked in to make a small windows
+    executable.
+
+    This would be a lot of work, unfortunately.  Also, what about
+    portability?  Should wait until LablGtk is more clearly the standard for
+    OCaml, or at least until it's better supported.
+
+  - Allow for display of planet names next to planets
+
+* UI
+
+ - improved GUI controls for optionbox
+    + exponential control
+    + Little up-and-down arrows on the entry controls would be nice.
+
+* Config Files
+
+ - Allow files to refrain from setting some variables, like G and G-exp.
+   This should be controllable from the UI.  Perhaps add a keyword to
+   indicate that the current values should not be overwritten.
+
+ - Modify lexer to enable forward and backward compatibility. i.e.,
+   non-understood entries are simply dropped.
+

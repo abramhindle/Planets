@@ -1,0 +1,103 @@
+Some quick notes on the code.  Planets is written entirely in OCaml, a
+functional language developed at INRIA, a variant on ML.  OCaml has a lot of
+nice features---the compiled code runs at near-C speeds, it has type
+inference, which means you need very few type declarations, which makes it
+terser and easier to read.  And it is statically typed, which means that it
+catches a lot of errors at compile time rather than run time.  And the
+compilers themselves are lightning fast compared to gcc.
+
+OCaml, however, has one big misfeature: it's unusual, and it's hard for
+someone who has never used it before to get use to the programming style.
+But OCaml is great language, so it could well be worth learing.
+
+Here's a list of the different modules and what they do.
+
+state.ml  
+
+   contains basic type definitions and holds the variables containing the
+   state.  This includes things like the definitions of vector operations.
+
+physics.ml
+
+   Contains the basic physics, including computing the action of bodies on
+   each other and a simple algorithm for collision detection and handling.
+   Some of the actual code is really implemented in fast_physics.ml, which is
+   where the physics code is moved to when it's optimized and made grungy.
+
+display.ml
+
+   This is the user interface.  It has a bunch of kinky stuff for setting up
+   things like the placement of a new planet.  You probably don?t want to
+   look at it for a while.  But it also contains some important and easy to
+   modify stuff, including the key bindings, and the constants determining
+   how many iterations are done per display cycle, and how long the display
+   cycle is.
+
+options.ml
+
+   This is somewhat hairy, so newbies beware.  This is the code for
+   implementing the little box containing the listing of configuration
+   variables.  The core data type here is a live value, which is just an
+   class wrapping a value such that callbacks are invoked whenever the value
+   is updated.  These callbacks are used to update the display when
+   configuration options are changed from outside the display, and to update
+   the simulation when the configuration options are changed.
+
+   Also contained in here is GUI code for generating the various kinds of
+   displays required for the differnent options.  There is much
+   object-and-inheritance stuff going on, which is always hard to understand.
+
+collision.ml
+
+   This code has all the raw material for the "true collision" mode.
+   Basically it knows how to play billiards.  The only function called by
+   other modules is one that takes as its argument a sequence of planets and
+   a time interval, and computes the motion, collisions and bounces that
+   would happen assuming all host's velocities stay constant.  This is done
+   by repeatedly computing the next collision, moving the time forward to
+   when that happens, and the computing how that collision causes planets to
+   bounce.  This is repeated until there are no further collisions in the
+   time period.
+
+common.ml
+
+   Contains a few definitions that are used in lots of places, primarily the
+   debugging information.
+   
+constants.ml
+
+   A couple of physics constants that need to be accessed in a few different places.
+
+fast_physics.ml
+
+   Contains the faster array-based implementation of some of the physics
+   primitives.  Full of lots of not-very-functional code.
+
+fqueue.ml
+
+   A simple functional queue implementation used to store planet traces
+
+saveState.ml:
+
+   Code for loading and saving universe files.  This is a tad more
+   sophisticated than your average flat config file --- it uses the ocaml
+   Genlex module to generating a lexer, which in turn allows for a pretty
+   flexible and readable file format.
+
+help.ml:
+	
+   Code for initial help window.  
+
+lstrings.ml: 
+
+   Localization.  Basically, it contains a bunch of functions (english,
+   danish, etc.) that provide translations from certain polymorphic variants
+   (i.e., `save or `load) to the appropriate string in the appropriate
+   language.  One of those functions is chosen at run-time as the one to
+   actually use.
+
+augMap.ml, augSet.ml: 
+
+   simple, augmented versions of the Set and Map modules.  The main
+   improvement is that these keep track of their size, so that getting the
+   number of elements is not linear.

@@ -1,0 +1,46 @@
+Note that universe files are now stored in ~/.planets, so you might want to
+drop the uni.9 example universe there.
+
+Normal keybindings
+
+   H                Display help dialog
+   a                Add Planet
+   =                Zoom In
+   -                Zoom Out
+   B                Toggle true bounce
+   b                Toggle bounce
+   c, space                 Center
+   k                Display option dialog
+   o                Change all colors
+   q, Escape        Quit
+   e                Reset to empty universe
+   s                Save Universe
+   l                Load Universe
+   u                Undo (undoes last planet insertion)
+   g                Go Back (goes back to last planet insertion)
+   p                Toggle Pause
+   t                Toggle Trace
+   d                Double Trace Length
+   h                Halve Trace Length
+   j                Place random orbital planet
+   r                Place random planet
+   x                Initiate C-O-M tracking
+   Up               Pan Up
+   Down             Pan Down
+   Left             Pan Left
+   Right            Pan Right
+
+Also:
+
+  * Drag a box around a set of planets to follow the center of mass of those
+    planets.
+  * Click on a planet to delete it
+
+
+Kidmode bindings:
+
+numbers : toggle tracing
+q,w,e,a,s,d,z,x,c: change colors
+space: move to center of mass
+escape: erase all planets
+all other buttons: add random planet
