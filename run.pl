@@ -1,10 +1,23 @@
 #!/usr/bin/perl
 use strict;
+use Time::HiRes qw(time);
+my $tempo = 60;
+my $ts = $tempo / 60;
 $| = 1;
+my $start_time = time();
 my $nth = 5;
 my $ticks = 0;
 my $readstate = 0;
 my @out = ();
+open(FILE,"head.sco");
+my @head = <FILE>;
+close(FILE);
+open(FILE,">","output.sco");
+print FILE @head;
+print FILE $/;
+print "f0 3600$/";
+print FILE "f0 0$/";
+
 while(my $line = <>) {
 	#warn "$ticks $readstate";
 	chomp $line;
@@ -33,9 +46,14 @@ sub process {
 }
 sub csprint {
 	my ($instr,$time,$dur,@o) = @_;
-	my $str = join(" ",("i$instr",(map { sprintf('%0.3f',$_) } ($time,$dur,@o)))).$/;
-	warn $str;
-	print $str;
+	my ($rt,$out) = map {
+		my $time = $_;
+		my $str = join(" ",("i$instr",(map { sprintf('%0.3f',$_) } ($time,$dur,@o)))).$/;
+		$str;
+	} ($time, $time + $ts * ((time() - $start_time)));
+	warn $rt;
+	print $rt;
+	print FILE $out;
 }
 
 __DATA__
