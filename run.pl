@@ -1,6 +1,10 @@
 #!/usr/bin/perl
 use strict;
 use Time::HiRes qw(time);
+use constant PI => 3.14159;
+#my @drum_pitches = ( 7.01 7.02 7.03 7.04 7.05 6.09  );
+my @drum_pitches = qw( 7.05 7.05 7.00 7.00 7.05 7.05 7.00 7.00 6.09 6.09 6.09);
+my $global_pitch = 0;
 my $tempo = 60;
 my $ts = $tempo / 60;
 $| = 1;
@@ -17,6 +21,8 @@ print FILE @head;
 print FILE $/;
 print "f0 3600$/";
 print FILE "f0 0$/";
+my $drum_alive = 0;
+my %bodies = ();
 
 while(my $line = <>) {
 	#warn "$ticks $readstate";
@@ -33,16 +39,67 @@ while(my $line = <>) {
 		push @out,[ split(/\s+/,$line) ];
 	}
 }
+sub min { ($_[0] > $_[1])?$_[1]:$_[0] }
 sub process {
 	my @elms = @_;
 	foreach my $elm (@elms) {
 		my ($id,$mass,$radius,$x,$y,$xv,$yv) = @$elm;
 		#csprint("1902",0.10,0.1,1000,$mass,$radius,$x,$y,$xv,$yv);
-		csprint("1902",0.01,0.5,
-			(1000*log(1.0+$mass * $radius)/25.0),
-			(6.000 + 3.0 * log(1.0 + ($xv*$xv+$yv*$yv)/$radius)/24.0),
-			0.9, 0.136, 0.45, 0.40);
+		$bodies{$id}->{instrument} ||= choose(qw(1902 1902 1902 1903 1903 1903  1904));
+		my $instrument = $bodies{$id}->{instrument};
+		$bodies{$id}->{alive} = $ticks;
+		$bodies{$id}->{elm} = $elm;
+		my $theta = atan2($xv,$yv);
+		if ($instrument == 1902) {
+			csprint("1902",0.01,0.1 + 0.4 * abs(cos($mass * $radius)),
+				(1000*log(1.0+$mass * $radius)/25.0),
+				(6.000 +  $theta / PI + 3.0 * log(1.0 + ($xv*$xv+$yv*$yv)/$radius)/24.0),
+				0.9, 0.136, 0.45, 0.40);
+		} elsif ($instrument == 1904) {
+			play_drum(@$elm);
+		} elsif ($instrument == 1903) {
+			#         START  DUR    AMP      PITCH   PRESS  FILTER     EMBOUCHURE  REED TABLE
+			# i 1903    0    16     6000      8.00     1.5  1000         .2            1
+			my $mag = sqrt(($xv * $xv) + ($yv * $yv));
+			my $dur = 0.4 + 0.2 * ($xv / $mag);
+			my $amp = 200 + 3000*abs(cos($mass * $radius * $yv * $yv));
+			my $pitch = 7.0 + 1.5 * $theta / PI;
+			my $filter = 800 + min(20 * log($mass),300);
+			my $pressure = 1.0 + 0.1 * log($mass)/30.0 + 0.9  * $theta / PI;
+			csprint("1903", 0.01, $dur,
+					$amp,
+					$pitch,
+					$pressure,
+					$filter,
+					0.2,
+					1);
+		}
 	}
+	foreach my $id (keys %bodies) {
+		#did a star die?
+		if ($bodies{$id}->{alive} < $ticks) {
+			play_drum(@{$bodies{$id}->{elm}});
+			delete $bodies{$id};
+		}
+	}
+}
+sub choose { return @_[rand(@_)]; }
+sub play_drum {
+	my ($id,$mass,$radius,$x,$y,$xv,$yv) = @_;
+	my $nowtime = time();
+	if ($nowtime - $drum_alive > 128) {
+		# ; DRUM 1
+		# ;       START  DUR  AMP    PITCH PREFILTER  TUBELENGTH  FEEDBACK1  FEEDBACK2
+		# i 1905  0     128  160    5.11   100           4          4.4        4.3
+		csprint("1905",0,128,160,5.11,100,4,4.4,4.3);
+		$drum_alive = $nowtime;
+	}
+	$bodies{$id}->{pitch} = $global_pitch++ unless (defined $bodies{$id}->{pitch});
+	my $amp = (1000*log(1.0+$mass * $radius)/25.0),
+	my $pitch = $drum_pitches[($bodies{$id}->{pitch}++ % scalar @drum_pitches)];
+	my $duration = 0.3 + 0.2 * cos($mass * $radius); 
+	my $prefilter = 100 + 20*rand();
+	csprint("1904",0.01,$duration,$amp,$pitch,$prefilter);
 }
 sub csprint {
 	my ($instr,$time,$dur,@o) = @_;

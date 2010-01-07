@@ -63,7 +63,9 @@ aflute1   deltapi   afqc
 
           instr      1903
 areedbell init  0
-ifqc      =          cpspch(p5)
+;ifqc      =          cpspch(p5)
+iafqc      pow       2,p5
+ifqc       = 200 + iafqc
 ifco      =          p7
 ibore     =          1/ifqc-15/sr
 
