@@ -1,0 +1,26 @@
+collision.cmo: state.cmo 
+collision.cmx: state.cmx 
+constants.cmo: options.cmo 
+constants.cmx: options.cmx 
+display.cmo: augSet.cmo common.cmo constants.cmo help.cmo lstrings.cmo \
+    mTimer.cmo options.cmo physics.cmo saveState.cmi state.cmo 
+display.cmx: augSet.cmx common.cmx constants.cmx help.cmx lstrings.cmx \
+    mTimer.cmx options.cmx physics.cmx saveState.cmx state.cmx 
+fast_physics.cmo: common.cmo constants.cmo mTimer.cmo rk4.cmi state.cmo 
+fast_physics.cmx: common.cmx constants.cmx mTimer.cmx rk4.cmx state.cmx 
+fqueue.cmo: fqueue.cmi 
+fqueue.cmx: fqueue.cmi 
+help.cmo: common.cmo lstrings.cmo saveState.cmi 
+help.cmx: common.cmx lstrings.cmx saveState.cmx 
+options.cmo: augMap.cmo common.cmo lstrings.cmo 
+options.cmx: augMap.cmx common.cmx lstrings.cmx 
+physics.cmo: common.cmo constants.cmo fast_physics.cmo state.cmo 
+physics.cmx: common.cmx constants.cmx fast_physics.cmx state.cmx 
+rk4.cmo: rk4.cmi 
+rk4.cmx: rk4.cmi 
+saveState.cmo: common.cmo state.cmo saveState.cmi 
+saveState.cmx: common.cmx state.cmx saveState.cmi 
+sqrt.cmo: mTimer.cmo 
+sqrt.cmx: mTimer.cmx 
+state.cmo: augMap.cmo augSet.cmo fqueue.cmi options.cmo 
+state.cmx: augMap.cmx augSet.cmx fqueue.cmx options.cmx 
