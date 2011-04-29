@@ -284,3 +284,13 @@ afiltr    =          afiltr/ifdbck2
           out       anodea*kampenv*1000
 
           endin
+
+          instr 1981 ; an audio looper
+idur      =     p3
+iamp      =     p4
+ifn       =     p5
+iindex    =     p6
+aamp    adsr (p3*0.1), (p3*0.1), 0.5, (p3*0.1)
+aout      oscili        iamp, 1.0, ifn, iindex
+          out aout*aamp
+          endin
